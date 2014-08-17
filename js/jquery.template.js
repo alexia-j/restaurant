@@ -16,6 +16,24 @@ $(function () {
     $bf_gallery_wrapper = $bf_gallery.children('.bf_gallery_wrapper'),
     $bf_items = $bf_gallery_wrapper.find('.bf_gallery_item'),
     total_items = $bf_items.length,
+    replaceBgImage = function (image) {
+      var $next_bgimage = $('<img src="' + 'images/background/full/' + image + '.jpg" alt="image' + (1) + '" ></img>'),
+        dim = BGImageController.getImageDim($next_bgimage);
+
+      //set the returned values and show the image
+      $next_bgimage.css({
+        width: dim.width + 'px',
+        height: dim.height + 'px',
+        left: dim.left,
+        top: dim.top + 'px'
+      }).insertBefore($bg_image);
+
+      $bg_image.stop().fadeOut(500, function () {
+        $(this).remove();
+        $bg_image = $next_bgimage;
+        animated = false;
+      });
+    },
 
     BGMap = (function () {
       var map,
@@ -136,7 +154,9 @@ $(function () {
         fadeBG = function (dir) {
           return $.Deferred(
             function (dfd) {
-              (dir) ? $bf_background.fadeIn(1000, dfd.resolve) : $bf_background.fadeOut(1500, dfd.resolve);
+              (dir)
+                ? $bf_background.fadeIn(1000, dfd.resolve)
+                : $bf_background.fadeOut(1500, dfd.resolve);
             }
           ).promise();
         },
@@ -446,6 +466,7 @@ $(function () {
             } else {
               $.when(BGImageController.fadeBG(true)).done(function () {
                 BGMap.hideMap();
+                replaceBgImage(item);
               });
               $('#' + $item.data('content')).show();
             }
