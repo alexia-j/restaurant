@@ -144,7 +144,7 @@ $(function () {
         preloadImages = function () {
           return $.Deferred(
             function (dfd) {
-              var Images = new Array();
+              var Images = [];
 
               $bf_items.each(function (i) {
                 var $item = $(this),
@@ -384,7 +384,6 @@ $(function () {
           }).insertAfter($bg_image).stop().animate({
             left: dim.left + 'px'
           }, animSpeed);
-          ;
 
           var ending_left = (dir) ? -$bg_image.width() : $(window).width();
 
